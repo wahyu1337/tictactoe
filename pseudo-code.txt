@@ -1,0 +1,11 @@
+-- made an IIFE pattern
+
+-- made a gameboard (array) that store the value of player's choose
+
+-- the game will be 2 player only
+
+-- the first player wild have an "X" value and second player will have an "O" value
+
+-- store the X & O into gameboard
+
+-- everytime  the gameboard calls, it will be push
