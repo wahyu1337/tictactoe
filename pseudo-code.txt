@@ -1,11 +1,26 @@
+-- create board
+
 -- made an IIFE pattern
 
 -- made a gameboard (array) that store the value of player's choose
 
--- the game will be 2 player only
+--made a reset button to reset the gameboard
+
+-- the game will be 2 player only (seperate variable)
 
 -- the first player wild have an "X" value and second player will have an "O" value
 
--- store the X & O into gameboard
+/* Create An IIFE game control */
 
--- everytime  the gameboard calls, it will be push
+store 2 player inside the game control
+
+
+
+(
+    -- give a playround.
+    -- player1 will track an X
+    After player1 decided or push the value into board, immediately switch to player2 turns
+
+    
+)
+-- store the X & O into gameboard  each players
