@@ -25,11 +25,26 @@ const createPlayer = function(name, marker){
     return {name, marker};
 }
 
-const player1 = createPlayer("Ways", "X");
-const player2 = createPlayer("Kinan", "O");
-
 // create game controller for tracks the array index
+const gameControl = (function(){
+    const player1 = createPlayer("Ways", "X");
+    const player2 = createPlayer("Donk", "O");
 
+    // turn tracks
+    let currentPlayer = player1;
 
-console.log(player1);
-console.log(player2);
+    // A playround
+    const playRound = function(index){
+        gameBoard.retrieveBoardMarker(index, currentPlayer.marker);
+        // Switch the player's turn
+       currentPlayer = currentPlayer === player1 ? player2 : player1;       
+    };
+
+    // return all the variable
+    return{player1, player2, currentPlayer, playRound};
+})();
+
+gameControl.playRound(0);
+gameControl.playRound(1);
+gameControl.playRound(5);
+console.log(gameBoard.retrieveBoardIndex());
