@@ -1,9 +1,6 @@
 // Gameboard with IIFE pattern
 const gameBoard = (function(){
-    const boards = 
-    ["", "", "", 
-    "", "", "", 
-    "", "", ""];
+    const boards = ["", "", "", "", "", "", "", "", ""];
 
     // Get board index.
     const retrieveBoardIndex = () => boards;
@@ -48,8 +45,7 @@ const gameController = (function(){
 
     // Check win & lose logic
     const getResult = function(arr){
-        let lastValue = null;
-        let count = 0;
+        const board = gameBoard.retrieveBoardIndex();
         const winPattern = [
             [0, 1, 2] // top row
             [3, 4, 5] // middle row
@@ -59,32 +55,17 @@ const gameController = (function(){
             [2, 5, 8] // right column
             [0, 4, 8] // diagonal
             [2, 4, 6] // diagonal
-        ]
+        ];
 
-        for(let i = 0; i < arr.length; i++){
-            const currentArr = arr[i]
-
-            // Skip if arr is an empty sting
-            if (currentArr === ""){
-                lastValue = null;
-                count = 0;
-                continue;
-            }
-
-            // reset the count if there is different value in arr.
-            if (arr[i] !== lastValue){
-                lastValue = arr[i];
-                count = 0;
-            }
-
-            // add count if there same    
-            count += 1
-
-            // check if arr has 3 same value in a rows.
-            if(count === 3){
-                return true;
-            }
-        }
+        for (let pattern of winPattern){
+            const [a, b, c] = pattern;            
+            // win logic pattern
+            if( board[a] !== "" && // skip if it's empty strings
+                board[a] !== pattern[b] &&
+                board[a] !== pattern[c]) {
+                return true;   
+            };
+        };
         return false;
     };
 
