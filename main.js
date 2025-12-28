@@ -1,5 +1,5 @@
 // Gameboard with IIFE pattern
-const gameBoard = (function() {
+const gameBoard = (function(){
     const boards = 
     ["", "", "", 
     "", "", "", 
@@ -35,7 +35,7 @@ const gameController = (function(){
 
     // player's turn track
     let currentPlayer = player1;
-    let getCurrentPlayer = () => currentPlayer;
+    let getCurrentPlayer = () => console.log(currentPlayer);
     
     // a play round's
     const playRound = function(index){
@@ -46,24 +46,58 @@ const gameController = (function(){
         currentPlayer = currentPlayer === player1 ? player2 : player1;
     };
 
-    // Set win & lose logic
-    const gameScore = function(){
-        let score = 0;
-        let boards = gameBoard.retrieveBoardIndex();
-        
-        // check the array if it has 3 consecutive
-        function checkPlayerMarker(arr, amount = 3){
-            let count = 0;
+    // Check win & lose logic
+    const getResult = function(arr){
+        let lastValue = null;
+        let count = 0;
+        const winPattern = [
+            [0, 1, 2] // top row
+            [3, 4, 5] // middle row
+            [6, 7, 8] // bottom row
+            [0, 3, 6] // left column
+            [1, 4, 7] // middle column
+            [2, 5, 8] // right column
+            [0, 4, 8] // diagonal
+            [2, 4, 6] // diagonal
+        ]
 
+        for(let i = 0; i < arr.length; i++){
+            const currentArr = arr[i]
+
+            // Skip if arr is an empty sting
+            if (currentArr === ""){
+                lastValue = null;
+                count = 0;
+                continue;
+            }
+
+            // reset the count if there is different value in arr.
+            if (arr[i] !== lastValue){
+                lastValue = arr[i];
+                count = 0;
+            }
+
+            // add count if there same    
+            count += 1
+
+            // check if arr has 3 same value in a rows.
+            if(count === 3){
+                return true;
+            }
         }
-        return{score, boards};
+        return false;
     };
 
-    return {player1, player2, currentPlayer, getCurrentPlayer, playRound, gameScore};
+    return {player1, player2, currentPlayer, getCurrentPlayer, playRound, getResult};
 })();
 
-gameController.playRound(0);
-gameController.playRound(1);
-gameController.playRound(5);
-gameController.playRound(6);
-console.log(gameController.gameScore());
+console.log(gameBoard.retrieveBoardIndex());
+console.log("------------------------------");
+gameController.playRound(1)
+gameController.playRound(5)
+gameController.playRound(2)
+gameController.playRound(0)
+gameController.playRound(7)
+console.log(gameBoard.retrieveBoardIndex());
+gameController.getCurrentPlayer();
+console.log(gameController.getResult(gameBoard.retrieveBoardIndex()));
