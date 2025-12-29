@@ -1,8 +1,6 @@
 // Gameboard with IIFE pattern
 const gameBoard = (function(){
-    const boards = [[0, 1, 2], 
-                    [3, 4, 5], 
-                    [6, 7, 8]];
+    const boards = ["", "", "", "", "", "", "", "", ""];
 
     // Get board index.
     const retrieveBoardIndex = () => boards;
@@ -30,7 +28,7 @@ const createPlayer = function(name, marker){
 // game controller with iife
 const gameController = (function(){
     const player1 = createPlayer("Ways", "X");
-    const player2 = createPlayer("Frost", "O"); 
+    const player2 = createPlayer("Frost", "O");
 
     // player's turn track
     let currentPlayer = player1;
@@ -45,46 +43,52 @@ const gameController = (function(){
         currentPlayer = currentPlayer === player1 ? player2 : player1;
     };
 
-    // Check win & lose logic
-    const getResult = function(arr){
-        const board = gameBoard.retrieveBoardIndex();
-        for (row of board){
-            console.log(row);
-        }
+    // Print the board
+    const printBoard = () => {
+    const board = gameBoard.retrieveBoardIndex();
 
-        const winPattern = [
-            [0, 1, 2] // top row
-            [3, 4, 5] // middle row
-            [6, 7, 8] // bottom row
-            [0, 3, 6] // left column
-            [1, 4, 7] // middle column
-            [2, 5, 8] // right column
-            [0, 4, 8] // diagonal
-            [2, 4, 6] // diagonal
-        ];
-
-        for (let pattern of winPattern){
-            const [a, b, c] = pattern;            
-            // win logic pattern
-            if( board[a] !== "" && // skip if it's empty strings
-                board[a] !== pattern[b] &&
-                board[a] !== pattern[c]) {
-                return true;   
-            };
-        };
-        return false;
+    console.log(`
+        -----------
+        |${board[0] || "-"} | ${board[1] || "-"} | ${board[2] || "-"}|
+        |${board[3] || "-"} | ${board[4] || "-"} | ${board[5] || "-"}|
+        |${board[6] || "-"} | ${board[7] || "-"} | ${board[8] || "-"}|
+        -----------
+        `)
     };
 
-    return {player1, player2, currentPlayer, getCurrentPlayer, playRound, getResult};
-})();
+    // Check win & lose logic or Get the result win or lose
+    const getResult = function(){
+        const board = gameBoard.retrieveBoardIndex();
 
-console.log(gameBoard.retrieveBoardIndex());
-console.log("------------------------------");
-gameController.playRound(1)
-gameController.playRound(5)
-gameController.playRound(2)
-gameController.playRound(0)
-gameController.playRound(7)
-console.log(gameBoard.retrieveBoardIndex());
-gameController.getCurrentPlayer();
-console.log(gameController.getResult());
+        // Winner pattern module
+        const winPattern = [
+            [0, 1, 2], // top row
+            [3, 4, 5], // middle row
+            [6, 7, 8], // bottom row
+            [0, 3, 6], // left column
+            [1, 4, 7], // middle column
+            [2, 5, 8], // right column
+            [0, 4, 8], // diagonal
+            [2, 4, 6], // diagonal
+        ];
+        
+        // looping for check each pattern if it's win
+        for (let pattern of winPattern){
+            const [a, b, c] = pattern;            
+            // win logic pattern * ROW
+            if( board[a] !== "" && // skip if it's empty strings
+                board[a] === board[b] && 
+                board[a] === board[c]) { 
+                // Check the winner's name
+                if (board[a] === "X"){
+                    return `Winner is ${player1.name} (${player1.marker})`;
+                } else {
+                    return `Winner is ${player2.name} ("${player2.marker}")`;
+                }
+            };
+        };
+        return `Game still going on!`;
+    };
+
+    return {player1, player2, currentPlayer, getCurrentPlayer, playRound, getResult, printBoard};
+})();
