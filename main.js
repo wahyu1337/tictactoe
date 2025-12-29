@@ -81,8 +81,10 @@ const gameController = (function(){
                 board[a] === board[c]) { 
                 // Check the winner's name
                 if (board[a] === "X"){
+                    printBoard();
                     return `Winner is ${player1.name} (${player1.marker})`;
                 } else {
+                    printBoard();
                     return `Winner is ${player2.name} ("${player2.marker}")`;
                 }
             };
@@ -92,3 +94,9 @@ const gameController = (function(){
 
     return {player1, player2, currentPlayer, getCurrentPlayer, playRound, getResult, printBoard};
 })();
+
+gameController.playRound(0);
+gameController.playRound(8);
+gameController.playRound(5);
+gameController.getCurrentPlayer();
+gameController.getResult();
