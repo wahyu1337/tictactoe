@@ -1,6 +1,8 @@
 // Gameboard with IIFE pattern
 const gameBoard = (function(){
-    const boards = ["", "", "", "", "", "", "", "", ""];
+    const boards = [["", "", ""], 
+                    ["", "", ""], 
+                    ["", "", ""]];
 
     // Get board index.
     const retrieveBoardIndex = () => boards;
@@ -46,6 +48,10 @@ const gameController = (function(){
     // Check win & lose logic
     const getResult = function(arr){
         const board = gameBoard.retrieveBoardIndex();
+        for (row of board){
+            console.log(row);
+        }
+
         const winPattern = [
             [0, 1, 2] // top row
             [3, 4, 5] // middle row
@@ -81,4 +87,4 @@ gameController.playRound(0)
 gameController.playRound(7)
 console.log(gameBoard.retrieveBoardIndex());
 gameController.getCurrentPlayer();
-console.log(gameController.getResult(gameBoard.retrieveBoardIndex()));
+console.log(gameController.getResult());
