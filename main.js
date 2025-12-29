@@ -94,9 +94,3 @@ const gameController = (function(){
 
     return {player1, player2, currentPlayer, getCurrentPlayer, playRound, getResult, printBoard};
 })();
-
-gameController.playRound(0);
-gameController.playRound(8);
-gameController.playRound(5);
-gameController.getCurrentPlayer();
-gameController.getResult();
