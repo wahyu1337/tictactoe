@@ -59,7 +59,6 @@ const gameController = (function(){
     // Check win & lose logic or Get the result win or lose
     const getResult = function(){
         let boards = gameBoard.retrieveBoardIndex();
-        let gameOver = false;
 
         console.log(`Player1 ->`, player1);
         console.log(`Player2 ->`, player2);
@@ -84,22 +83,23 @@ const gameController = (function(){
                 boards[a] === boards[b] && 
                 boards[a] === boards[c]) { 
                 // Check the winner's name
-                if (boards[a] === "X"){
-                    gameOver = true;
-                    printBoard();
-                    return console.log(`Winner is ${player1.name} (${player1.marker})`);
-                } else {
-                    gameOver = true
-                    printBoard();
-                    return console.log(`Winner is ${player2.name} ("${player2.marker}")`);
-                }                                
+                const winners = boards[a] === "X" ? player1 : player2;                
+                printBoard();
+                console.log(`Winner: `, winners);
+                // reset game after game over.
+                gameBoard.resetGame();
+                return console.log(`(The game will be reset.)`);
             };          
         };
 
         // draw checks
-        if (boards.filter(cell => cell === "").length === 0){
+        if (boards.filter(cell => cell === "").length === 0){            
             printBoard();
-            return console.log("Draws");
+            console.log("Draws");
+
+            // reset game after game over.
+            gameBoard.resetGame();
+            return console.log(`(The game will be reset.)`);
         }
 
         printBoard();
@@ -116,6 +116,7 @@ gameController.playRound(5);
 gameController.playRound(3);
 gameController.playRound(8);
 gameController.playRound(7);
-gameController.playRound(4);
 gameController.playRound(1);
+gameController.playRound(4);
+gameController.getResult();
 gameController.getResult();
