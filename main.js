@@ -27,12 +27,12 @@ const createPlayer = function(name, marker){
 
 // game controller with iife
 const gameController = (function(){
-    const player1 = createPlayer("Ways", "X");
-    const player2 = createPlayer("Frost", "O");
+    const player1 = createPlayer("Player 1", "X");
+    const player2 = createPlayer("Player 2", "O");
 
     // player's turn track
     let currentPlayer = player1;
-    let getCurrentPlayer = () => console.log(currentPlayer);
+    let getCurrentPlayer = () => console.log(`Current Turn -> `, currentPlayer);
     
     // a play round's
     const playRound = function(index){
@@ -88,7 +88,8 @@ const gameController = (function(){
                 console.log(`Winner: `, winners);
                 // reset game after game over.
                 gameBoard.resetGame();
-                return console.log(`(The game will be reset.)`);
+                currentPlayer = player1;
+                return console.log(`(The game will be reset.)\n==========================\n`);
             };          
         };
 
@@ -99,10 +100,12 @@ const gameController = (function(){
 
             // reset game after game over.
             gameBoard.resetGame();
-            return console.log(`(The game will be reset.)`);
+            currentPlayer = player1;
+            return console.log(`(The game will be reset.)\n==========================\n`);
         }
 
         printBoard();
+        gameController.getCurrentPlayer();
         return console.log(`Game still going on!\n`);
     };
 
@@ -117,6 +120,6 @@ gameController.playRound(3);
 gameController.playRound(8);
 gameController.playRound(7);
 gameController.playRound(1);
-gameController.playRound(4);
+gameController.playRound(1);
 gameController.getResult();
 gameController.getResult();
