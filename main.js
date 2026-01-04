@@ -58,7 +58,11 @@ const gameController = (function(){
 
     // Check win & lose logic or Get the result win or lose
     const getResult = function(){
-        const board = gameBoard.retrieveBoardIndex();
+        let boards = gameBoard.retrieveBoardIndex();
+        let gameOver = false;
+
+        console.log(`Player1 ->`, player1);
+        console.log(`Player2 ->`, player2);
 
         // Winner pattern module
         const winPattern = [
@@ -76,21 +80,41 @@ const gameController = (function(){
         for (let pattern of winPattern){
             const [a, b, c] = pattern;            
             // win logic pattern * ROW
-            if( board[a] !== "" && // skip if it's empty strings
-                board[a] === board[b] && 
-                board[a] === board[c]) { 
+            if( boards[a] !== "" && // skip if it's empty strings
+                boards[a] === boards[b] && 
+                boards[a] === boards[c]) { 
                 // Check the winner's name
-                if (board[a] === "X"){
+                if (boards[a] === "X"){
+                    gameOver = true;
                     printBoard();
-                    return `Winner is ${player1.name} (${player1.marker})`;
+                    return console.log(`Winner is ${player1.name} (${player1.marker})`);
                 } else {
+                    gameOver = true
                     printBoard();
-                    return `Winner is ${player2.name} ("${player2.marker}")`;
-                }
+                    return console.log(`Winner is ${player2.name} ("${player2.marker}")`);
+                }                                
             };
+            
+            // draw checks
+            if (boards.filter(cell => cell === "").length === 0){
+                printBoard();
+                return console.log("Draws");
+            }
         };
-        return `Game still going on!`;
+        printBoard();
+        return console.log(`Game still going on!\n`);
     };
 
     return {player1, player2, currentPlayer, getCurrentPlayer, playRound, getResult, printBoard};
 })();
+
+gameController.playRound(0);
+gameController.playRound(6);
+gameController.playRound(2);
+gameController.playRound(5);
+gameController.playRound(3);
+gameController.playRound(8);
+gameController.playRound(7);
+gameController.playRound(4);
+gameController.playRound(1);
+gameController.getResult();
