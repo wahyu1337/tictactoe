@@ -93,14 +93,15 @@ const gameController = (function(){
                     printBoard();
                     return console.log(`Winner is ${player2.name} ("${player2.marker}")`);
                 }                                
-            };
-            
-            // draw checks
-            if (boards.filter(cell => cell === "").length === 0){
-                printBoard();
-                return console.log("Draws");
-            }
+            };          
         };
+
+        // draw checks
+        if (boards.filter(cell => cell === "").length === 0){
+            printBoard();
+            return console.log("Draws");
+        }
+
         printBoard();
         return console.log(`Game still going on!\n`);
     };
