@@ -15,7 +15,7 @@ const gameBoard = (function (){
         }
     }
 
-    return {board, printBoard, resetBoard};
+    return {printBoard, resetBoard};
 })()
 
 const createPlayer = function(name, marker){
