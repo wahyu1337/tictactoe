@@ -41,6 +41,7 @@ const gameController = (function(){
 
         // switch the player after turn's        
         currentPlayer = currentPlayer === player1 ? player2 : player1;
+        return currentPlayer;
     };
 
     // Print the board
