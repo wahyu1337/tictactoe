@@ -1,3 +1,4 @@
+// Default Game Boards
 const gameBoard = (function (){
     // Empty Board
     const board =  ["", "", "",
@@ -18,6 +19,8 @@ const gameBoard = (function (){
     return {printBoard, resetBoard};
 })()
 
+
+// Create Player function (factory function)
 const createPlayer = function(name, marker){
     // Retrieve player's information
     function getPlayerInfo(){
@@ -27,9 +30,12 @@ const createPlayer = function(name, marker){
     return {getPlayerInfo}
 }
 
-const player1 = createPlayer("Ways", "X");
-const player2 = createPlayer("Kinan", "O");
+// Game Controller
+const gameController = (function(){
+    const player1 = createPlayer("Ways", "X");
+    const player2 = createPlayer("Kinan", "O");
 
-console.log('-------------------OUTPUT-------------------')
-player1.getPlayerInfo();
-player2.getPlayerInfo();
+    return {player1, player2};    
+})()
+
+console.log('\n-------------------OUTPUT-------------------');
