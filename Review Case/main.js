@@ -17,7 +17,7 @@ const gameBoard = (function (){
     }
 
     return {printBoard, resetBoard};
-})()
+})();
 
 
 // Create Player function (factory function)
@@ -28,7 +28,7 @@ const createPlayer = function(name, marker){
     }
 
     return {name, marker, getPlayerInfo}
-}
+};
 
 // Game Controller
 const gameController = (function(){
@@ -42,14 +42,19 @@ const gameController = (function(){
     // Set Player's turn
     let currentPlayer = player1;
 
+    // Switch Player's turn
+    function switchPlayer(){
+        // Ternary
+        currentPlayer = currentPlayer === player1 ? player2 : player1;
+    }
+
     // get current player's turn information
     function getCurrentPlayer(){
        console.log(`${currentPlayer.name}'s Turn!`);
     }
 
-    return {board, player1, player2, getCurrentPlayer};    
+    return {board, player1, player2, switchPlayer, getCurrentPlayer};    
 })()
 
 console.log('\n-------------------OUTPUT-------------------');
 gameController.board.printBoard();
-gameController.getCurrentPlayer();
