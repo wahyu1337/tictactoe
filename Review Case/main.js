@@ -1,14 +1,17 @@
 // Default Game Boards
 const gameBoard = (function (){
     // Empty Board
-    const board = [ "X", "O", "O",
-                    "", "X", "O",
-                    "O", "X", ""];  
-    
-    // Print first Board value
-    const printBoard = () => console.log(board);
-    
+    const board = [ "", "", "",
+                    "", "", "",
+                    "", "", ""];  
+
+    // get board index
     const getBoard = () => board;
+
+    // Place marker for board index
+    function placeMarker(index, marker){
+        board[index] = marker;
+    }
 
     // Reset the board
     function resetBoard(){
@@ -17,7 +20,7 @@ const gameBoard = (function (){
         }
     }
 
-    return {printBoard, getBoard, resetBoard};
+    return {getBoard, placeMarker, resetBoard};
 })();
 
 
@@ -33,8 +36,18 @@ const createPlayer = function(name, marker){
 
 // Game Controller
 const gameController = (function(){
-    // Take the boards
-    const board = gameBoard;
+    // Print/Console the board
+    const printBoard = () => {
+        const board = gameBoard.getBoard();
+
+        console.log(`
+                -----------
+                |${board[0] || "-"} | ${board[1] || "-"} | ${board[2] || "-"}|
+                |${board[3] || "-"} | ${board[4] || "-"} | ${board[5] || "-"}|
+                |${board[6] || "-"} | ${board[7] || "-"} | ${board[8] || "-"}|
+                -----------
+        `)
+    }
 
     // Create player inside game controller
     const player1 = createPlayer("Ways", "X");
@@ -51,8 +64,11 @@ const gameController = (function(){
 
     // get current player's turn information
     function getCurrentPlayer(){
-       console.log(`${currentPlayer.name}'s Turn!`);
+       console.log(`${currentPlayer.name}'s Turn! (${currentPlayer.marker})`);
     }
+
+    // flag agar game berhenti jika selesai.
+    let gameOver = false;
 
     // Winner Checkers
     function winnerChecks(){
@@ -62,34 +78,77 @@ const gameController = (function(){
             [0, 1, 2], // row 1 horizontal
             [3, 4, 5], // row 2 horizontal
             [6, 7, 8], // row 3 horizontal
-
+            
             // Vertical 1, 2, 3
             [0, 3, 6], // Vertical 1
             [1, 4, 7], // Vertical 2
             [2, 5, 8], // Vertical 3
-
+            
             // Diagonal
             [0,4,8], // Diagonal Line 1
             [2,4,6] // Diagonal Line 2
         ];
-
+        
         for (let pattern of winnerPattern){
             const [a, b, c] = pattern;
-
+            
             if (currentBoards[a] !== "" &&
                 currentBoards[a] === currentBoards[b] &&
                 currentBoards[a] === currentBoards[c]
             ) {
-                return console.log('We have a winner!');
+                // Notification winner message
+                console.log(`${currentPlayer.name} is the winner!`);
+                // Set gameOver true
+                gameOver = true;
+                printBoard();
             }
         }
-        return console.log("Game still going on!")
+    }
+    
+    // PLAY ROUND-
+    function playRound(index){
+        if(gameOver){
+            console.log("Game is finish! Reset the game first...");
+            return resetGame();
+        } else {
+            // Start or Put the marker immediately
+            gameBoard.placeMarker(index, currentPlayer.marker);
+            
+            // Print the board after player one round start.
+            printBoard();
+            
+            // Check Game status after print out board.
+            winnerChecks();
+
+            // Switch the player after put the marker.
+            switchPlayer();
+            
+            // Get current player's turn after board's print
+            getCurrentPlayer();
+        }
+    }
+    
+    // Reset Game function
+    function resetGame(){
+        console.log("Resetting the game...");
+        gameOver = false;
+        gameBoard.resetBoard();
+        // setelah game di reset, kembalikan ke player 1 (X)
+        currentPlayer = player1;
+        console.log("Game has been reset!\n---------------------")
+        getCurrentPlayer();
     }
 
-    return {board, player1, player2, switchPlayer, getCurrentPlayer, winnerChecks};    
+    return {printBoard, player1, player2, switchPlayer, getCurrentPlayer, playRound, resetGame};    
 })()
 
 console.log('\n-------------------OUTPUT-------------------');
-gameController.board.printBoard();
-gameController.getCurrentPlayer();
-gameController.winnerChecks();
+gameController.playRound(0);
+gameController.playRound(4);
+gameController.playRound(3);
+gameController.playRound(6);
+gameController.playRound(1);
+gameController.playRound(2);
+// resetting
+gameController.playRound(8);
+gameController.playRound(1);

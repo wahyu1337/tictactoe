@@ -1,126 +1,154 @@
-// Gameboard with IIFE pattern
-const gameBoard = (function(){
-    const boards = ["", "", "", "", "", "", "", "", ""];
+// Default Game Boards
+const gameBoard = (function (){
+    // Empty Board
+    const board = [ "", "", "",
+                    "", "", "",
+                    "", "", ""];  
 
-    // Get board index.
-    const retrieveBoardIndex = () => boards;
+    // get board index
+    const getBoard = () => board;
 
-    // Give index and marker
-    const retrieveBoardMarker = (index, marker) => {
-        boards[index] = marker;
+    // Place marker for board index
+    function placeMarker(index, marker){
+        board[index] = marker;
     }
-    
-    // Resetting the game logic
-    const resetGame = function(){
-        for (let i = 0; i < boards.length; i++){
-            boards[i] = "";
-        }
-    };    
 
-    return {boards, retrieveBoardIndex, retrieveBoardMarker, resetGame};
+    // Reset the board
+    function resetBoard(){
+        for (let i = 0; i < board.length; i++){
+            board[i] = "";
+        }
+    }
+
+    return {getBoard, placeMarker, resetBoard};
 })();
 
-// create a  player
-const createPlayer = function(name, marker){    
-    return {name, marker};
+
+// Create Player function (factory function)
+const createPlayer = function(name, marker){
+    // Retrieve player's information
+    function getPlayerInfo(){
+        console.log(`Player: ${name} | Marker: ${marker}`)
+    }
+
+    return {name, marker, getPlayerInfo}
 };
 
-// game controller with iife
+// Game Controller
 const gameController = (function(){
-    const player1 = createPlayer("Player 1", "X");
-    const player2 = createPlayer("Player 2", "O");
-
-    // player's turn track
-    let currentPlayer = player1;
-    let getCurrentPlayer = () => console.log(`Current Turn -> `, currentPlayer);
-    
-    // a play round's
-    const playRound = function(index){
-        // immediately retrieve the marker into board.
-        gameBoard.retrieveBoardMarker(index, currentPlayer.marker); 
-
-        // switch the player after turn's        
-        currentPlayer = currentPlayer === player1 ? player2 : player1;
-        return currentPlayer;
-    };
-
-    // Print the board
+    // Print/Console the board
     const printBoard = () => {
-    const board = gameBoard.retrieveBoardIndex();
+        const board = gameBoard.getBoard();
 
-    console.log(`
-        -----------
-        |${board[0] || "-"} | ${board[1] || "-"} | ${board[2] || "-"}|
-        |${board[3] || "-"} | ${board[4] || "-"} | ${board[5] || "-"}|
-        |${board[6] || "-"} | ${board[7] || "-"} | ${board[8] || "-"}|
-        -----------
+        console.log(`
+                -----------
+                |${board[0] || "-"} | ${board[1] || "-"} | ${board[2] || "-"}|
+                |${board[3] || "-"} | ${board[4] || "-"} | ${board[5] || "-"}|
+                |${board[6] || "-"} | ${board[7] || "-"} | ${board[8] || "-"}|
+                -----------
         `)
-    };
+    }
 
-    // Check win & lose logic or Get the result win or lose
-    const getResult = function(){
-        let boards = gameBoard.retrieveBoardIndex();
+    // Create player inside game controller
+    const player1 = createPlayer("Ways", "X");
+    const player2 = createPlayer("Kinan", "O");
 
-        console.log(`Player1 ->`, player1);
-        console.log(`Player2 ->`, player2);
+    // Set Player's turn
+    let currentPlayer = player1;
 
-        // Winner pattern module
-        const winPattern = [
-            [0, 1, 2], // top row
-            [3, 4, 5], // middle row
-            [6, 7, 8], // bottom row
-            [0, 3, 6], // left column
-            [1, 4, 7], // middle column
-            [2, 5, 8], // right column
-            [0, 4, 8], // diagonal
-            [2, 4, 6], // diagonal
+    // Switch Player's turn
+    function switchPlayer(){
+        // Ternary
+        currentPlayer = currentPlayer === player1 ? player2 : player1;
+    }
+
+    // get current player's turn information
+    function getCurrentPlayer(){
+       console.log(`${currentPlayer.name}'s Turn! (${currentPlayer.marker})`);
+    }
+
+    // flag agar game berhenti jika selesai.
+    let gameOver = false;
+
+    // Winner Checkers
+    function winnerChecks(){
+        let currentBoards = gameBoard.getBoard();
+        const winnerPattern = [
+            // Row 1, 2, 3 
+            [0, 1, 2], // row 1 horizontal
+            [3, 4, 5], // row 2 horizontal
+            [6, 7, 8], // row 3 horizontal
+            
+            // Vertical 1, 2, 3
+            [0, 3, 6], // Vertical 1
+            [1, 4, 7], // Vertical 2
+            [2, 5, 8], // Vertical 3
+            
+            // Diagonal
+            [0,4,8], // Diagonal Line 1
+            [2,4,6] // Diagonal Line 2
         ];
         
-        // looping for check each pattern if it's win
-        for (let pattern of winPattern){
-            const [a, b, c] = pattern;            
-            // win logic pattern * ROW
-            if( boards[a] !== "" && // skip if it's empty strings
-                boards[a] === boards[b] && 
-                boards[a] === boards[c]) { 
-                // Check the winner's name
-                const winners = boards[a] === "X" ? player1 : player2;                
+        for (let pattern of winnerPattern){
+            const [a, b, c] = pattern;
+            
+            if (currentBoards[a] !== "" &&
+                currentBoards[a] === currentBoards[b] &&
+                currentBoards[a] === currentBoards[c]
+            ) {
+                // Notification winner message
+                console.log(`${currentPlayer.name} is the winner!`);
+                // Set gameOver true
+                gameOver = true;
                 printBoard();
-                console.log(`Winner: `, winners);
-                // reset game after game over.
-                gameBoard.resetGame();
-                currentPlayer = player1;
-                return console.log(`(The game will be reset.)\n==========================\n`);
-            };          
-        };
-
-        // draw checks
-        if (boards.filter(cell => cell === "").length === 0){            
-            printBoard();
-            console.log("Draws");
-
-            // reset game after game over.
-            gameBoard.resetGame();
-            currentPlayer = player1;
-            return console.log(`(The game will be reset.)\n==========================\n`);
+            }
         }
+    }
+    
+    // PLAY ROUND-
+    function playRound(index){
+        if(gameOver){
+            console.log("Game is finish! Reset the game first...");
+            return resetGame();
+        } else {
+            // Start or Put the marker immediately
+            gameBoard.placeMarker(index, currentPlayer.marker);
+            
+            // Print the board after player one round start.
+            printBoard();
+            
+            // Check Game status after print out board.
+            winnerChecks();
 
-        printBoard();
-        gameController.getCurrentPlayer();
-        return console.log(`Game still going on!\n`);
-    };
+            // Switch the player after put the marker.
+            switchPlayer();
+            
+            // Get current player's turn after board's print
+            getCurrentPlayer();
+        }
+    }
+    
+    // Reset Game function
+    function resetGame(){
+        console.log("Resetting the game...");
+        gameOver = false;
+        gameBoard.resetBoard();
+        // setelah game di reset, kembalikan ke player 1 (X)
+        currentPlayer = player1;
+        console.log("Game has been reset!\n---------------------")
+        getCurrentPlayer();
+    }
 
-    return {player1, player2, currentPlayer, getCurrentPlayer, playRound, getResult, printBoard};
-})();
+    return {printBoard, player1, player2, switchPlayer, getCurrentPlayer, playRound, resetGame};    
+})()
 
+console.log('\n-------------------OUTPUT-------------------');
 gameController.playRound(0);
-gameController.playRound(6);
-gameController.playRound(2);
-gameController.playRound(5);
+gameController.playRound(4);
 gameController.playRound(3);
+gameController.playRound(6);
+gameController.playRound(1);
+gameController.playRound(2);
+// resetting
 gameController.playRound(8);
-gameController.playRound(7);
 gameController.playRound(1);
-gameController.playRound(1);
-gameController.getResult();
-gameController.getResult();
