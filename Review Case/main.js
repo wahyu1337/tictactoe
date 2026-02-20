@@ -27,15 +27,29 @@ const createPlayer = function(name, marker){
         console.log(`Player: ${name} | Marker: ${marker}`)
     }
 
-    return {getPlayerInfo}
+    return {name, marker, getPlayerInfo}
 }
 
 // Game Controller
 const gameController = (function(){
+    // Take the boards
+    const board = gameBoard;
+
+    // Create player inside game controller
     const player1 = createPlayer("Ways", "X");
     const player2 = createPlayer("Kinan", "O");
 
-    return {player1, player2};    
+    // Set Player's turn
+    let currentPlayer = player1;
+
+    // get current player's turn information
+    function getCurrentPlayer(){
+       console.log(`${currentPlayer.name}'s Turn!`);
+    }
+
+    return {board, player1, player2, getCurrentPlayer};    
 })()
 
 console.log('\n-------------------OUTPUT-------------------');
+gameController.board.printBoard();
+gameController.getCurrentPlayer();
