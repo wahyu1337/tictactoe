@@ -1,0 +1,22 @@
+h1{
+    font-size: 3.2rem;
+    font-weight: bold;
+}
+
+body{
+    display: grid;
+    justify-content: center;
+}
+
+#board{
+    display: grid;
+    grid-template-rows: repeat(3, min-content);
+    grid-template-columns: repeat(3, min-content);
+}
+
+.cell{
+    padding: 8px;
+    height: 100px;
+    width: 100px;
+    font-size: 2rem;
+}

@@ -1,3 +1,32 @@
+// board selection
+const boards = document.querySelector("#boards");
+
+// looping for dynamic button
+for (let i = 0; i < 9; i++){
+    const cell = document.createElement("button");
+
+    cell.addEventListener("click", function(){
+        console.log("Cell ke-" + i + " diklik!")
+        gameController.playRound(i);
+        updateBoard();
+    });
+    boards.appendChild(cell);
+};
+
+function updateBoard(){
+    const boardData = gameBoard.getBoard();
+    
+    // ambil cell yang sudah dibuat
+    const cells = document.querySelectorAll("#boards button");
+
+    //loop dan update tiap cell
+    cells.forEach(function(cell, index) {
+        cell.textContent = boardData[index];
+    });
+}
+
+//--------------------------------------------------------
+
 // Default Game Boards
 const gameBoard = (function (){
     // Empty Board
@@ -107,6 +136,8 @@ const gameController = (function(){
     
     // PLAY ROUND-
     function playRound(index){
+        if(gameBoard.getBoard()[index] !== "") return;
+
         if(gameOver){
             console.log("Game is finish! Reset the game first...");
             return resetGame();
@@ -142,20 +173,4 @@ const gameController = (function(){
     return {printBoard, player1, player2, switchPlayer, getCurrentPlayer, playRound, resetGame};    
 })()
 
-// DOM MANIPULATION
-const boards = document.querySelector("#board");
-
-// Loop to made a cell;
-for(let i = 0; i < 9; i++){
-    // create button HTML element
-    const cell = document.createElement("button");
-    cell.classList.add("cell");
-
-    // test text
-    cell.textContent = i;
-
-    // append the button into html
-    boards.appendChild(cell)
-}
-
-console.log('-----OUTPUT-');
+console.log('\n-------------------OUTPUT-------------------');
