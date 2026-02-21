@@ -183,8 +183,28 @@ function updateBoard(){
     const boardData = gameBoard.getBoard();
 
     cells.forEach(function(cell, index){
+        // make X red color and O blue color
+        if (boardData[index] === "X"){
+            cell.style.color = "red";
+        } else {
+            cell.style.color = "blue";
+        }
         cell.textContent = boardData[index];
     })
 }
+
+// Player Information DOM
+const playerInfo = document.querySelector("#gameInfo");
+const p1 = document.createElement("p");
+const p2 = document.createElement("p");
+    p1.classList.add("player");
+    p2.classList.add("player");
+
+// append player's information into UI
+p1.textContent = gameController.player1.name + ` (${gameController.player1.marker})`;
+
+p2.textContent = gameController.player2.name + ` (${gameController.player2.marker})`;
+    playerInfo.appendChild(p1);
+    playerInfo.appendChild(p2);
 
 console.log('-----OUTPUT-----');
