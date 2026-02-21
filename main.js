@@ -101,7 +101,20 @@ const gameController = (function(){
                 // Set gameOver true
                 gameOver = true;
                 printBoard();
+                return;
+            } else if ( currentBoards[a] !== "" &&
+                        currentBoards[a] !== currentBoards[b] &&
+                        currentBoards[a] !== currentBoards[c]
+            ) {
+                console.log()
             }
+        }
+
+        const isDraw = currentBoards.every(cell => cell !== "")
+        if(isDraw){
+            console.log("Game's Draw!");
+            gameOver = true;
+            printBoard();
         }
     }
     
@@ -151,11 +164,27 @@ for(let i = 0; i < 9; i++){
     const cell = document.createElement("button");
     cell.classList.add("cell");
 
-    // test text
-    cell.textContent = i;
+    //text
+    cell.textContent = "";
+    cell.addEventListener("click", function(){
+        console.log("Cell-" + i + " diklik!")
+        gameController.playRound(i);
+        updateBoard();
+    });
 
     // append the button into html
     boards.appendChild(cell)
 }
 
-console.log('-----OUTPUT-');
+function updateBoard(){
+    // DOM
+    // get board
+    const cells = document.querySelectorAll("#board button");
+    const boardData = gameBoard.getBoard();
+
+    cells.forEach(function(cell, index){
+        cell.textContent = boardData[index];
+    })
+}
+
+console.log('-----OUTPUT-----');
