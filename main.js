@@ -34,6 +34,38 @@ const createPlayer = function(name, marker){
     return {name, marker, getPlayerInfo}
 };
 
+// Create player
+const btnStart = document.querySelector(".btnStart");
+btnStart.addEventListener("click", function(){
+    // DOM for input.
+    const p1 = document.getElementById("player1").value;
+    const p2 = document.getElementById("player2").value;
+    const playerInfo = document.querySelector("#playerInfo");
+    // Create player name "paragraph"
+    const player1Name = document.createElement("p");
+    const player2Name = document.createElement("p");
+        player1Name.classList.add("player");
+        player2Name.classList.add("player");
+
+    if(p1 !== "" && p2 !== ""){
+        // Start game
+        gameController.startGame(p1, p2);
+     
+        // Display and get player's name data
+        player1Name.textContent = p1 + " (X)";
+        player2Name.textContent = p2 + " (O)"; 
+        playerInfo.appendChild(player1Name);
+        playerInfo.appendChild(player2Name);
+
+        // console message
+        console.log("Player Created.");
+        console.log("Player 1 = " + p1);
+        console.log("Player 2 = " + p2);                
+    } else {
+        console.log("Error, put name for player first!")
+    }    
+});
+
 // Game Controller
 const gameController = (function(){
     // Print/Console the board
@@ -49,12 +81,22 @@ const gameController = (function(){
         `)
     }
 
-    // Create player inside game controller
-    const player1 = createPlayer("Ways", "X");
-    const player2 = createPlayer("Kinan", "O");
-
+    // setup player
+    let player1 = null;
+    let player2 = null;
+    
+    //func buat start gamenya.
+    function startGame(p1name, p2name){
+        player1 = createPlayer(p1name, "X");
+        player2 = createPlayer(p2name, "O");
+    };
     // Set Player's turn
-    let currentPlayer = player1;
+    let currentPlayer = player1;       
+
+    //DOM winner informations
+    const winners = document.querySelector("#winnerInfo");
+    const winnersName = document.createElement("p");
+        winnersName.classList.add('winnersName');    
 
     // Switch Player's turn
     function switchPlayer(){
@@ -72,7 +114,7 @@ const gameController = (function(){
 
     // Winner Checkers
     function winnerChecks(){
-        let currentBoards = gameBoard.getBoard();
+        let currentBoards = gameBoard.getBoard();        
         const winnerPattern = [
             // Row 1, 2, 3 
             [0, 1, 2], // row 1 horizontal
@@ -96,8 +138,11 @@ const gameController = (function(){
                 currentBoards[a] === currentBoards[b] &&
                 currentBoards[a] === currentBoards[c]
             ) {
-                // Notification winner message
+                // console winner message
                 console.log(`${currentPlayer.name} is the winner!`);
+                // Display the winner message
+                winnersName.textContent = `${currentPlayer.name} is the winner!`;                
+                winners.appendChild(winnersName);
                 // Set gameOver true
                 gameOver = true;
                 printBoard();
@@ -144,15 +189,25 @@ const gameController = (function(){
     // Reset Game function
     function resetGame(){
         console.log("Resetting the game...");
+
+        // check jika sudah ada pemenang
+        if(winners.contains(winnersName)){
+            winners.removeChild(winnersName);
+        };
+
+        // Reset gameOver..
         gameOver = false;
+
+        // Reset Boardnya.
         gameBoard.resetBoard();
+
         // setelah game di reset, kembalikan ke player 1 (X)
         currentPlayer = player1;
         console.log("Game has been reset!\n---------------------")
         getCurrentPlayer();
     }
 
-    return {printBoard, player1, player2, switchPlayer, getCurrentPlayer, playRound, resetGame};    
+    return {printBoard, player1, player2, switchPlayer, getCurrentPlayer, playRound, resetGame, startGame};    
 })()
 
 // DOM MANIPULATION
@@ -191,20 +246,5 @@ function updateBoard(){
         }
         cell.textContent = boardData[index];
     })
-}
-
-// Player Information DOM
-const playerInfo = document.querySelector("#gameInfo");
-const p1 = document.createElement("p");
-const p2 = document.createElement("p");
-    p1.classList.add("player");
-    p2.classList.add("player");
-
-// append player's information into UI
-p1.textContent = gameController.player1.name + ` (${gameController.player1.marker})`;
-
-p2.textContent = gameController.player2.name + ` (${gameController.player2.marker})`;
-    playerInfo.appendChild(p1);
-    playerInfo.appendChild(p2);
-
+}   
 console.log('-----OUTPUT-----');
