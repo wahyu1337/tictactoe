@@ -66,6 +66,18 @@ btnStart.addEventListener("click", function(){
     }    
 });
 
+// Restart function
+// add restart button
+    const restart = document.createElement("div");
+    const btnRestart = document.createElement("button");
+
+    btnRestart.classList.add("btnRestart");
+    btnRestart.textContent = "RESTART"
+
+    // displayer restart button
+    document.body.appendChild(restart);
+        restart.appendChild(btnRestart);
+        
 // Game Controller
 const gameController = (function(){
     // Print/Console the board
@@ -73,25 +85,38 @@ const gameController = (function(){
         const board = gameBoard.getBoard();
 
         console.log(`
-                -----------
-                |${board[0] || "-"} | ${board[1] || "-"} | ${board[2] || "-"}|
-                |${board[3] || "-"} | ${board[4] || "-"} | ${board[5] || "-"}|
-                |${board[6] || "-"} | ${board[7] || "-"} | ${board[8] || "-"}|
-                -----------
+    -----------
+    |${board[0] || "-"} | ${board[1] || "-"} | ${board[2] || "-"}|
+    |${board[3] || "-"} | ${board[4] || "-"} | ${board[5] || "-"}|
+    |${board[6] || "-"} | ${board[7] || "-"} | ${board[8] || "-"}|
+    -----------
         `)
     }
 
-    // setup player
+    // var for setup player
     let player1 = null;
     let player2 = null;
+
+    // Set Player's turn
+    let currentPlayer = null;       
     
     //func buat start gamenya.
     function startGame(p1name, p2name){
+        // set player name and marker
         player1 = createPlayer(p1name, "X");
         player2 = createPlayer(p2name, "O");
+        
+        // set player's turn here
+        currentPlayer = player1;
+
+        // display the board & player info after game start. 
+        document.querySelector("#board").style.display = "grid";
+        document.querySelector("#playerInfo").style.display = "grid";
+
+        // hide start and input
+        document.querySelector("#playerSetup").style.display = "none";     
+        
     };
-    // Set Player's turn
-    let currentPlayer = player1;       
 
     //DOM winner informations
     const winners = document.querySelector("#winnerInfo");
