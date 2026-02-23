@@ -77,7 +77,7 @@ btnRestart.textContent = "RESTART";
 btnRestart.addEventListener("click", function(){
     // Reset the board
     console.log("Restarting the game...");
-    gameBoard.resetBoard();
+    gameController.resetGame();
     gameController.printBoard();
 
     // re-display the board
@@ -202,6 +202,10 @@ const gameController = (function(){
     
     // PLAY ROUND-
     function playRound(index){
+        // if there's index.
+        if(gameBoard.getBoard()[index] !== "") return;
+        
+        // If game's over
         if(gameOver){
             console.log("Game is finish! Reset the game first...");
             return resetGame();
