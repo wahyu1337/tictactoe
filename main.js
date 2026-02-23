@@ -286,6 +286,8 @@ function updateBoard(){
             cell.style.color = "blue";
         }
         cell.textContent = boardData[index];
+        cell.setAttribute("data-marker", boardData[index]);
+
     })
 }   
 console.log('-----OUTPUT-----');
