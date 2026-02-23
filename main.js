@@ -68,16 +68,25 @@ btnStart.addEventListener("click", function(){
 
 // Restart function
 // add restart button
-    const restart = document.createElement("div");
-    const btnRestart = document.createElement("button");
+const restart = document.createElement("div");
+const btnRestart = document.createElement("button");
 
-    btnRestart.classList.add("btnRestart");
-    btnRestart.textContent = "RESTART"
+btnRestart.classList.add("btnRestart");
+btnRestart.textContent = "RESTART";
 
-    // displayer restart button
-    document.body.appendChild(restart);
-        restart.appendChild(btnRestart);
-        
+btnRestart.addEventListener("click", function(){
+    // Reset the board
+    console.log("Restarting the game...");
+    gameBoard.resetBoard();
+    gameController.printBoard();
+
+    // re-display the board
+    updateBoard();
+});
+
+// displayer restart button
+document.body.appendChild(restart); 
+
 // Game Controller
 const gameController = (function(){
     // Print/Console the board
@@ -114,7 +123,10 @@ const gameController = (function(){
         document.querySelector("#playerInfo").style.display = "grid";
 
         // hide start and input
-        document.querySelector("#playerSetup").style.display = "none";     
+        document.querySelector("#playerSetup").style.display = "none";
+        
+        // display restart button after game's start
+        restart.appendChild(btnRestart);
         
     };
 
